@@ -3,8 +3,24 @@ import { ColumnDef } from '@tanstack/vue-table'
 import DropdownAction from '@/components/DataTableDropDown.vue'
 import { ArrowUpDown, ChevronDown } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 
 export const columns: ColumnDef<Payment>[] = [
+  {
+    id: 'select',
+    header: ({ table }) => h(Checkbox, {
+      'checked': table.getIsAllPageRowsSelected(),
+      'onUpdate:checked': (value: boolean) => table.toggleAllPageRowsSelected(!!value),
+      'ariaLabel': 'Select all',
+    }),
+    cell: ({ row }) => h(Checkbox, {
+      'checked': row.getIsSelected(),
+      'onUpdate:checked': (value: boolean) => row.toggleSelected(!!value),
+      'ariaLabel': 'Select row',
+    }),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: 'email',
     header: ({ column }) => {
@@ -36,6 +52,7 @@ export const columns: ColumnDef<Payment>[] = [
 
       return h('div', { class: 'relative' }, h(DropdownAction, {
         payment,
+        onExpand: row.toggleExpanded,
       }))
     },
   },
