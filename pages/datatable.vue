@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
 import { columns } from '../components/columns'
 import type { Payment } from '../components/columns'
 import DataTable from '../components/DataTable.vue'
@@ -109,7 +108,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="container py-10 mx-auto">
+  <div>
     <DataTable :columns="columns" :data="data" />
   </div>
 </template>

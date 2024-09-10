@@ -1,10 +1,14 @@
+<script setup lang="ts">
+const isOpen = useState('is-sidebar-open', () => true)
+</script>
+
 <template>
 	<div class="w-full h-full">
 		<!-- sidebar -->
 		<SidebarMain></SidebarMain>
 
 		<!-- main container -->
-		<div class="ml-64 pt-14 h-screen">
+		<div class="ml-64 pt-14 h-screen" :class="!isOpen ? 'ml-0' : ''">
 			<div class="flex flex-col h-full overflow-y-auto bg-white">
 				<!-- content -->
 				<div class="px-6 py-4 flex-1">
