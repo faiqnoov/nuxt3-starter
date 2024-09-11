@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const isOpen = useState('is-sidebar-open', () => true)
+const isOpen = useState('is-sidebar-open')
 </script>
 
 <template>
@@ -8,7 +8,7 @@ const isOpen = useState('is-sidebar-open', () => true)
 		<SidebarMain></SidebarMain>
 
 		<!-- main container -->
-		<div class="ml-64 pt-14 h-screen" :class="!isOpen ? 'ml-0' : ''">
+		<div class="pt-14 h-screen" :class="isOpen ? 'xl:ml-64' : ''">
 			<div class="flex flex-col h-full overflow-y-auto bg-white">
 				<!-- content -->
 				<div class="px-6 py-4 flex-1">
@@ -20,7 +20,6 @@ const isOpen = useState('is-sidebar-open', () => true)
 					<span class="text-xs">&copy; noovproject 2024</span>
 				</div>
 			</div>
-
 		</div>
 	</div>
 </template>

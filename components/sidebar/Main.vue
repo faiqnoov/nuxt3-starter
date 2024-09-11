@@ -1,12 +1,29 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
-import { ChevronLeftIcon, ChevronRightIcon } from '@radix-icons/vue'
+import { HamburgerMenuIcon } from '@radix-icons/vue'
 
-const isOpen = useState('is-sidebar-open', () => true)
+const isOpen = useState('is-sidebar-open', () => false)
+const windowWidth = ref(0)
 
 const toggleSidebar = () => isOpen.value = !isOpen.value
 
-watch(isOpen, (val) => console.log('isOpen:', val))
+const updateWidth = () => {
+	windowWidth.value = window.innerWidth
+}
+
+onMounted(() => {
+	windowWidth.value = window.innerWidth
+	window.addEventListener('resize', updateWidth)
+})
+
+onUnmounted(() => {
+	window.removeEventListener('resize', updateWidth)
+})
+
+watch(windowWidth, (newVal) => {
+	if (windowWidth.value >= 1280) isOpen.value = true
+	else isOpen.value = false
+})
 
 const sidebarItem = {
 	top: [
@@ -39,13 +56,12 @@ const sidebarItem = {
 		:class="!isOpen ? '-translate-x-64' : ''"
 	>
 		<!-- sidebar toggle btn -->
-		<Button variant="ghost" size="icon" class="absolute top-2.5 -right-12" @click="toggleSidebar">
-			<ChevronLeftIcon v-if="isOpen" class="w-4 h-4" />
-			<ChevronRightIcon v-else class="w-4 h-4" />
+		<Button variant="ghost" size="icon" class="absolute top-2.5 -right-14" @click="toggleSidebar">
+			<HamburgerMenuIcon class="w-4 h-4" />
 		</Button>
 
 		<div class="w-full text-xl text-center">
-			<h1>Empix Boolu</h1>
+			<h1>Tarix Jabrix</h1>
 		</div>
 
 		<div class="flex flex-col flex-1 gap-2 mt-10">
