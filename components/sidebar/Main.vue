@@ -37,6 +37,11 @@ const sidebarItem = {
 			url: '/datatable',
 			icon: '',
 		},
+		{
+			title: 'Books',
+			url: '/eg/books',
+			icon: '',
+		},
 	],
 	bottom: [
 		{
