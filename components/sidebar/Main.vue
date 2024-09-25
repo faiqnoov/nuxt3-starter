@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
-import { HamburgerMenuIcon } from '@radix-icons/vue'
+import { HamburgerMenuIcon, HomeIcon, TableIcon, StackIcon, PersonIcon } from '@radix-icons/vue'
+
+const route = useRoute()
 
 const isOpen = useState('is-sidebar-open', () => false)
 const windowWidth = ref(0)
@@ -30,26 +32,30 @@ const sidebarItem = {
 		{
 			title: 'Home',
 			url: '/',
-			icon: '',
+			icon: HomeIcon,
 		},
 		{
 			title: 'Datatable',
 			url: '/datatable',
-			icon: '',
+			icon: TableIcon,
 		},
 		{
 			title: 'Books',
 			url: '/eg/books',
-			icon: '',
+			icon: StackIcon,
 		},
 	],
 	bottom: [
 		{
 			title: 'Profile',
 			url: '',
-			icon: '',
+			icon: PersonIcon,
 		},
 	],
+}
+
+const isActive = (url: string) => {
+  return route.path === url
 }
 </script>
 
@@ -71,22 +77,24 @@ const sidebarItem = {
 
 		<div class="flex flex-col flex-1 gap-2 mt-10">
 			<div class="flex flex-col flex-1">
-				<Button 
-					variant="ghost" 
-					class="text-left" 
+				<Button  
+					:variant="isActive(item.url) ? 'default' : 'ghost'"
+					class="justify-start"
 					v-for="item in sidebarItem.top" 
 					@click="navigateTo(item.url)"
 				>
+					<component :is="item.icon" class="w-4 h-4 mr-2" />
 					{{ item.title }}
 				</Button>
 			</div>
 			<div class="flex flex-col">
 				<Button 
-					variant="ghost" 
-					class="text-left" 
+					:variant="isActive(item.url) ? 'default' : 'ghost'"
+					class="justify-start"
 					v-for="item in sidebarItem.bottom" 
 					@click="navigateTo(item.url)"
 				>
+					<component :is="item.icon" class="w-4 h-4 mr-2" />
 					{{ item.title }}
 				</Button>
 			</div>
