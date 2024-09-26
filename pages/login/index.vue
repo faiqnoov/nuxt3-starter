@@ -8,6 +8,48 @@ definePageMeta({
   layout: 'plain'
 })
 
+const email = ref('');
+const password = ref('');
+
+/* const { data, status, error, refresh } = await useFetch('http://localhost:1337/api/auth/local/', {
+  method: 'POST',
+  body: {
+    identifier: email.value,
+    password: password.value,
+  },
+  headers: {
+    'Content-Type': 'application/json',
+  },
+}) */
+
+// useing useFetch interceptors
+const { data, status, error, refresh } = await useFetch('http://localhost:1337/api/auth/local/', {
+  onRequest({ request, options }) {
+    options.immediate = false
+    options.method = 'POST'
+    options.body = {
+      identifier: email.value,
+      password: password.value,
+    }
+    options.headers = {
+      'Content-Type': 'application/json',
+    }
+  },
+  onRequestError({ request, options, error }) {
+    console.log('onRequestError:', error);
+  },
+  onResponse({ request, response, options }) {
+    console.log('onResponse:', response);
+
+    localStorage.setItem('token', response._data.jwt)
+    navigateTo('/')
+  },
+  onResponseError({ request, response, options }) {
+    console.log('onResponseError:', response);
+  }
+})
+
+
 </script>
 
 <template>
@@ -25,7 +67,7 @@ definePageMeta({
         <div class="grid gap-4">
           <div class="grid gap-2">
             <Label for="email">Email</Label>
-            <Input id="email" type="email" placeholder="m@example.com" required />
+            <Input id="email" type="email" placeholder="m@example.com" v-model="email" required />
           </div>
           <div class="grid gap-2">
             <div class="flex items-center">
@@ -34,9 +76,9 @@ definePageMeta({
                 Forgot your password?
               </a>
             </div>
-            <Input id="password" type="password" required />
+            <Input id="password" type="password" required v-model="password" />
           </div>
-          <Button type="submit" class="w-full">
+          <Button type="submit" class="w-full" @click="refresh">
             Login
           </Button>
         </div>

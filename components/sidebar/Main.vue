@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiMenuOpen, mdiMenuClose, mdiHomeOutline, mdiTable, mdiAccount, mdiLogout } from '@mdi/js'
 import { Button } from '@/components/ui/button'
 import { HamburgerMenuIcon, HomeIcon, TableIcon, StackIcon, PersonIcon } from '@radix-icons/vue'
 
@@ -49,7 +51,12 @@ const sidebarItem = {
 		{
 			title: 'Profile',
 			url: '',
-			icon: PersonIcon,
+			icon: mdiAccount,
+		},
+		{
+			title: 'Logout',
+			url: '/login',
+			icon: mdiLogout,
 		},
 	],
 }
@@ -68,7 +75,7 @@ const isActive = (url: string) => {
 	>
 		<!-- sidebar toggle btn -->
 		<Button variant="ghost" size="icon" class="absolute top-2.5 -right-14" @click="toggleSidebar">
-			<HamburgerMenuIcon class="w-4 h-4" />
+			<HamburgerMenuIcon class="size-4" />
 		</Button>
 
 		<div class="w-full text-xl text-center">
@@ -83,7 +90,7 @@ const isActive = (url: string) => {
 					v-for="item in sidebarItem.top" 
 					@click="navigateTo(item.url)"
 				>
-					<component :is="item.icon" class="w-4 h-4 mr-2" />
+					<component :is="item.icon" class="size-4 mr-2" />
 					{{ item.title }}
 				</Button>
 			</div>
@@ -94,7 +101,7 @@ const isActive = (url: string) => {
 					v-for="item in sidebarItem.bottom" 
 					@click="navigateTo(item.url)"
 				>
-					<component :is="item.icon" class="w-4 h-4 mr-2" />
+					<SvgIcon type="mdi" :path="item.icon" class="size-4 mr-2" />
 					{{ item.title }}
 				</Button>
 			</div>
