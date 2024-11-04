@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { HamburgerMenuIcon, HomeIcon, TableIcon, StackIcon, PersonIcon } from '@radix-icons/vue'
 
 const route = useRoute()
+const router = useRouter()
 
 const isOpen = useState('is-sidebar-open', () => false)
 const windowWidth = ref(0)
@@ -28,6 +29,13 @@ watch(windowWidth, (newVal) => {
 	if (windowWidth.value >= 1280) isOpen.value = true
 	else isOpen.value = false
 })
+
+const logout = () => {
+	if (process.client) {
+		localStorage.removeItem('token');
+		router.push('/login');
+	}
+};
 
 const sidebarItem = {
 	top: [
@@ -55,7 +63,7 @@ const sidebarItem = {
 		},
 		{
 			title: 'Logout',
-			url: '/login',
+			handler: () => { logout() },
 			icon: mdiLogout,
 		},
 	],
@@ -99,7 +107,7 @@ const isActive = (url: string) => {
 					:variant="isActive(item.url) ? 'default' : 'ghost'"
 					class="justify-start"
 					v-for="item in sidebarItem.bottom" 
-					@click="navigateTo(item.url)"
+					@click="item.handler"
 				>
 					<SvgIcon type="mdi" :path="item.icon" class="size-4 mr-2" />
 					{{ item.title }}

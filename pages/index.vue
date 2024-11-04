@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { RocketIcon } from '@radix-icons/vue'
+
+definePageMeta({
+  middleware: 'auth',
+});
+
 </script>
 
 <template>

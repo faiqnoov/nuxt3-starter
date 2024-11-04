@@ -8,21 +8,39 @@ definePageMeta({
   layout: 'plain'
 })
 
+const router = useRouter()
+
+const param = ref({
+  identifier: '',
+  password: '',
+})
+
+const login = async () => {
+  try {
+    const { data, status, error } = await useFetch('http://localhost:1337/api/auth/local/', {
+      method: 'POST',
+      body: param.value,
+    })
+
+    if (error.value) throw new Error("Something went wrong!");
+
+    if (data.value.hasOwnProperty('jwt')) {
+      if (process.client) {
+        localStorage.setItem('token', data.value.jwt);
+        router.push('/');
+      }
+    }
+
+  } catch (err) {
+    console.error("Caught an error:", error.message);
+  }
+}
+
+// useing useFetch interceptors
+/* 
 const email = ref('');
 const password = ref('');
 
-/* const { data, status, error, refresh } = await useFetch('http://localhost:1337/api/auth/local/', {
-  method: 'POST',
-  body: {
-    identifier: email.value,
-    password: password.value,
-  },
-  headers: {
-    'Content-Type': 'application/json',
-  },
-}) */
-
-// useing useFetch interceptors
 const { data, status, error, refresh } = await useFetch('http://localhost:1337/api/auth/local/', {
   onRequest({ request, options }) {
     options.immediate = false
@@ -47,7 +65,7 @@ const { data, status, error, refresh } = await useFetch('http://localhost:1337/a
   onResponseError({ request, response, options }) {
     console.log('onResponseError:', response);
   }
-})
+}) */
 
 
 </script>
@@ -67,7 +85,7 @@ const { data, status, error, refresh } = await useFetch('http://localhost:1337/a
         <div class="grid gap-4">
           <div class="grid gap-2">
             <Label for="email">Email</Label>
-            <Input id="email" type="email" placeholder="m@example.com" v-model="email" required />
+            <Input id="email" type="email" placeholder="m@example.com" v-model="param.identifier" required />
           </div>
           <div class="grid gap-2">
             <div class="flex items-center">
@@ -76,9 +94,9 @@ const { data, status, error, refresh } = await useFetch('http://localhost:1337/a
                 Forgot your password?
               </a>
             </div>
-            <Input id="password" type="password" required v-model="password" />
+            <Input id="password" type="password" required v-model="param.password" />
           </div>
-          <Button type="submit" class="w-full" @click="refresh">
+          <Button type="submit" class="w-full" @click="login">
             Login
           </Button>
         </div>
